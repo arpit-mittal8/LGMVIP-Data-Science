@@ -1,22 +1,39 @@
-import cv2
+import cv2 
+import matplotlib.pyplot as plt
+plt.style.use('seaborn')
 
+img = cv2.imread('Spider man.jpg')
+img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+plt.figure(figsize=(8,8))
+plt.imshow(img)
+plt.axis("off")
+plt.title("Colured Image")
+plt.show()
 
-image = cv2.imread('image.jpg')
+img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+plt.figure(figsize=(8,8))
+plt.imshow(img_gray,cmap="gray")
+plt.axis("off")
+plt.title("GrayScale Image")
+plt.show()
 
+img_invert = cv2.bitwise_not(img_gray)
+plt.figure(figsize=(8,8))
+plt.imshow(img_invert,cmap="gray")
+plt.axis("off")
+plt.title("Inverted Image")
+plt.show()
 
-grey_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+img_smoothing = cv2.GaussianBlur(img_invert, (21, 21),sigmaX=0, sigmaY=0)
+plt.figure(figsize=(8,8))
+plt.imshow(img_smoothing,cmap="gray")
+plt.axis("off")
+plt.title("Smoothen Image")
+plt.show()
 
-
-inverted_img = cv2.bitwise_not(grey_img)
-
-
-blur_img = cv2.GaussianBlur(inverted_img,(31,21),35)
-
-
-inverted_blur_img = cv2.bitwise_not(blur_img)
-
-
-sketch = cv2.divide(grey_img, inverted_blur_img, scale = 256.0)
-
-
-cv2.imwrite('sketch.jpg',sketch)
+final = cv2.divide(img_gray, 255 - img_smoothing, scale=257)
+plt.figure(figsize=(8,8))
+plt.imshow(final,cmap="gray")
+plt.axis("off")
+plt.title("Sketch Image")
+plt.show()
